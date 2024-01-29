@@ -2,26 +2,19 @@
 
 const router = require('express').Router();
 const authenticate = require('../../middleware/authenticate')
-const products = require('../../db/products.json')
 
 router.get("/", authenticate, (req, res) => {
-    res.json({ status: 'ok, good to go', products })
+    // console.log(products)
+    const result = req.database.products
+    res.json({ status: 'ok, good to go', result})
 })
 
 router.get("/:id", authenticate, (req, res) => {
-    console.log(req.params)
     console.log(req.params.id)
     const itemId = req.params.id;
-    const item = products[itemId]
-    for (var i = 0; i < products.length; i++) {
-        if (products[i].id === itemId) {
-            console.log(products[i])
-            return products[i]
-        }
-    }
-
-    // let productObj = id: req.params
-    res.json({ status: 'ok, good to go', item: item })
+    console.log(req.database.products)
+    const result = req.database.products.find(({ id }) => id === itemId)
+    res.json({ status: 'ok, good to go', result })
 
 })
 
